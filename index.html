@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Disaster Simulation Training Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                🌍 DisasterSim Academy
+            </div>
+            <div class="user-stats">
+                <div class="stat">
+                    <span class="stat-icon">⭐</span>
+                    <span id="totalScore">0</span> Points
+                </div>
+                <div class="stat">
+                    <span class="stat-icon">🏆</span>
+                    <span id="badgeCount">0</span> Badges
+                </div>
+                <div class="stat">
+                    <span class="stat-icon">📈</span>
+                    Level <span id="playerLevel">1</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1 class="title">3D Disaster Response Training</h1>
+            <p class="subtitle">Master emergency protocols through immersive 3D simulations</p>
+            <div class="features">
+                <div class="feature-item">🎮 Interactive 3D Environment</div>
+                <div class="feature-item">📚 Educational Content</div>
+                <div class="feature-item">🏅 Achievement System</div>
+                <div class="feature-item">📊 Progress Tracking</div>
+            </div>
+        </section>
+
+        <!-- Simulation Selection -->
+        <section class="simulation-grid" id="simulationGrid">
+            <div class="sim-card" data-disaster="earthquake">
+                <div class="sim-icon">🏚️</div>
+                <h3 class="sim-title">Earthquake Response</h3>
+                <p class="sim-description">Learn Drop, Cover, and Hold techniques in a realistic 3D classroom environment</p>
+                <div class="sim-stats">
+                    <div class="difficulty">Difficulty: <span class="level-badge beginner">Beginner</span></div>
+                    <div class="duration">Duration: ~15 minutes</div>
+                    <div class="badge-reward">Badge: 🏗️ Earthquake Expert</div>
+                </div>
+                <button class="start-btn" onclick="startSimulation('earthquake')">Start Simulation</button>
+                <div class="completion-status" id="earthquake-status"></div>
+            </div>
+
+            <div class="sim-card" data-disaster="landslide">
+                <div class="sim-icon">⛰️</div>
+                <h3 class="sim-title">Landslide Safety</h3>
+                <p class="sim-description">Navigate through a hillside community and learn evacuation procedures</p>
+                <div class="sim-stats">
+                    <div class="difficulty">Difficulty: <span class="level-badge intermediate">Intermediate</span></div>
+                    <div class="duration">Duration: ~20 minutes</div>
+                    <div class="badge-reward">Badge: 🏔️ Landslide Guardian</div>
+                </div>
+                <button class="start-btn" onclick="startSimulation('landslide')">Start Simulation</button>
+                <div class="completion-status" id="landslide-status"></div>
+            </div>
+
+            <div class="sim-card" data-disaster="flood">
+                <div class="sim-icon">🌊</div>
+                <h3 class="sim-title">Flood Management</h3>
+                <p class="sim-description">Experience rising water levels and practice emergency evacuation</p>
+                <div class="sim-stats">
+                    <div class="difficulty">Difficulty: <span class="level-badge advanced">Advanced</span></div>
+                    <div class="duration">Duration: ~25 minutes</div>
+                    <div class="badge-reward">Badge: 🏊 Flood Hero</div>
+                </div>
+                <button class="start-btn" onclick="startSimulation('flood')">Start Simulation</button>
+                <div class="completion-status" id="flood-status"></div>
+            </div>
+        </section>
+
+        <!-- Badge Collection -->
+        <section class="badge-section">
+            <h2 class="section-title">Your Achievements</h2>
+            <div class="badge-grid" id="badgeGrid">
+                <div class="badge-item locked" id="badge-earthquake">
+                    <div class="badge-icon">🏗️</div>
+                    <div class="badge-name">Earthquake Expert</div>
+                    <div class="badge-description">Master earthquake response protocols</div>
+                </div>
+                <div class="badge-item locked" id="badge-landslide">
+                    <div class="badge-icon">🏔️</div>
+                    <div class="badge-name">Landslide Guardian</div>
+                    <div class="badge-description">Expert in landslide safety measures</div>
+                </div>
+                <div class="badge-item locked" id="badge-flood">
+                    <div class="badge-icon">🏊</div>
+                    <div class="badge-name">Flood Hero</div>
+                    <div class="badge-description">Champion of flood emergency response</div>
+                </div>
+                <div class="badge-item locked" id="badge-master">
+                    <div class="badge-icon">🌟</div>
+                    <div class="badge-name">Disaster Master</div>
+                    <div class="badge-description">Complete all simulations with excellence</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 3D Simulation Container -->
+    <div class="simulation-container" id="simulationContainer">
+        <div class="simulation-header">
+            <div class="sim-info">
+                <h2 id="currentSimTitle">Simulation</h2>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+            </div>
+            <div class="sim-controls">
+                <button class="control-btn" id="pauseBtn" onclick="togglePause()">⏸️</button>
+                <button class="control-btn" id="resetBtn" onclick="resetSimulation()">🔄</button>
+                <button class="control-btn" id="exitBtn" onclick="exitSimulation()">❌</button>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="simulationCanvas"></canvas>
+        </div>
+        
+        <div class="instructions-panel" id="instructionsPanel">
+            <div class="instruction-content">
+                <h3 id="instructionTitle">Welcome to the Simulation</h3>
+                <p id="instructionText">Follow the instructions to complete the disaster response training.</p>
+                <div class="instruction-actions">
+                    <button class="action-btn primary" id="nextInstructionBtn">Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drag-drop-panel" id="dragDropPanel">
+            <div class="panel-title">Emergency Items</div>
+            <div class="draggable-items" id="draggableItems">
+                <!-- Items will be populated by JavaScript -->
+            </div>
+            <div class="drop-zones" id="dropZones">
+                <!-- Drop zones will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Badge Rewards -->
+    <div class="modal" id="badgeModal">
+        <div class="modal-content">
+            <div class="badge-celebration">
+                <div class="celebration-icon" id="celebrationIcon">🎉</div>
+                <h2>Congratulations!</h2>
+                <div class="earned-badge">
+                    <div class="badge-icon-large" id="earnedBadgeIcon">🏗️</div>
+                    <div class="badge-name-large" id="earnedBadgeName">Earthquake Expert</div>
+                </div>
+                <p id="badgeMessage">You've successfully completed the earthquake simulation!</p>
+                <div class="score-summary">
+                    <div class="score-item">
+                        <span class="label">Points Earned:</span>
+                        <span class="value" id="pointsEarned">500</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="label">Time Bonus:</span>
+                        <span class="value" id="timeBonus">100</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="label">Accuracy:</span>
+                        <span class="value" id="accuracyScore">85%</span>
+                    </div>
+                </div>
+                <button class="modal-btn" onclick="closeBadgeModal()">Continue Learning</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Loading Simulation...</h3>
+            <p id="loadingText">Preparing 3D environment...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="game-engine.js"></script>
+    <script src="earthquake-sim.js"></script>
+    <script src="landslide-sim.js"></script>
+    <script src="flood-sim.js"></script>
+    <script src="badge-system.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
